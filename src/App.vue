@@ -47,6 +47,7 @@ export default {
 
 body {
   margin: 0;
+  padding: 0;
   font-family: "Lato", sans-serif;
 }
 h1 {
@@ -64,7 +65,7 @@ h2 {
   display: flex;
   align-items: center;
   background-color: #2d2d58;
-  width: 100%;
+  
 }
 
 #menu {

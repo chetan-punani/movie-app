@@ -18,7 +18,7 @@
         <option value="crime">crime</option>
         <option value="drama">drama</option>
         <option value="family">family</option>
-        <option value="game_show">game_show</option>
+        <option value="game_show">Game Show</option>
         <option value="history">history</option>
         <option value="horror">horror</option>
         <option value="music">music</option>
@@ -30,7 +30,7 @@
       </select>
     </div>
 
-    <div v-if="searchMovieName">
+    <!-- <div v-if="searchMovieName">
       <section class="grid-container">
         <RouterLink
           v-for="movie in movieList"
@@ -55,9 +55,9 @@
       <div class="item error" v-if="searchMovieName && movieList.length === 0">
         <p>No results found!</p>
       </div>
-    </div>
+    </div> -->
 
-    <section class="grid-container" v-else>
+    <section class="grid-container">
       <RouterLink
         v-for="movie in movieList"
         :key="movie.id"
@@ -81,6 +81,8 @@
 </template>
 
 <script>
+import data from "../api/data.js";
+
 export default {
   name: "home",
   data: () => {
@@ -91,64 +93,58 @@ export default {
 
       onChange(e) {
         const category = e.target.value;
-        //   console.log(category)
-
-        //    this.movieList = this.movieList.filter((item) =>
-        //   item.genres === category
-        // );
-        this.$http
-          .get(
-            "https://imdb-api.com/API/AdvancedSearch/k_au2t6aps/?genres=" +
-              category
-          )
-          .then((response) => {
-            if (response.data.results) {
-              this.movieList = response.data.results;
-            }
-            console.log(response.data.results);
-          });
+        console.log(category);
+        this.movieList = data;
+        this.movieList = this.movieList.filter(
+          (item) => item.genres === category
+        );
+        // this.$http
+        //   .get(
+        //     "https://imdb-api.com/API/AdvancedSearch/k_au2t6aps/?genres=" +
+        //       category
+        //   )
+        //   .then((response) => {
+        //     if (response.data.results) {
+        //       this.movieList = response.data.results;
+        //     }
+        //     console.log(response.data.results);
+        //   });
       },
     };
   },
-  // computed: {
-  //   searchList() {
-  //     return this.movieList.filter((item) =>
-  //       item.name.toLowerCase().includes(this.searchMovieName.toLowerCase())
-  //     );
-  //     return this.movieList;
-  //   },
-  //   movieRender() {
-  //     return this.movieList;
-  //   },
-  // },
   methods: {
     seatchMovie() {
-      // this.movieList = this.movieList.filter((item) =>
-      //   item.title.toLowerCase().includes(this.searchMovieName.toLowerCase())
-      // );
-      this.$http
-        .get(
-          "https://imdb-api.com/en/API/Search/k_au2t6aps/" +
-            this.searchMovieName
-        )
-        .then((response) => {
-          if (response.data.results) {
-            this.movieList = response.data.results;
-          }
-          console.log(response.data.results);
-        });
+      if (this.searchMovieName === " ") {
+        this.movieList = data;
+      } else {
+        this.movieList = this.movieList.filter((item) =>
+          item.title.toLowerCase().includes(this.searchMovieName.toLowerCase())
+        );
+      }
+
+      // this.$http
+      //   .get(
+      //     "https://imdb-api.com/en/API/Search/k_au2t6aps/" +
+      //       this.searchMovieName
+      //   )
+      //   .then((response) => {
+      //     if (response.data.results) {
+      //       this.movieList = response.data.results;
+      //     }
+      //     console.log(response.data.results);
+      //   });
     },
   },
   mounted() {
-    this.movieList = [];
-    this.$http
-      .get("https://imdb-api.com/en/API/Top250Movies/k_au2t6aps")
-      .then((response) => {
-        if (response.data.items) {
-          this.movieList = response.data.items;
-        }
-        console.log(response.data.items);
-      });
+    this.movieList = data;
+    // this.$http
+    //   .get("https://imdb-api.com/en/API/Top250Movies/k_au2t6aps")
+    //   .then((response) => {
+    //     if (response.data.items) {
+    //       this.movieList = response.data.items;
+    //     }
+    //     console.log(response.data.items);
+    //   });
   },
 };
 </script>
@@ -200,6 +196,8 @@ export default {
   display: grid;
   grid-template-columns: auto auto auto auto auto;
   padding: 10px;
+  grid-column-gap: 50px;
+  grid-row-gap: 10px;
 }
 .grid-item {
   background-color: rgba(255, 255, 255, 0.8);
