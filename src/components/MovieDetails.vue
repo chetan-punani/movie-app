@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div v-for="(movie, index) in movie" :key="index">
-      <div class="card">
-        <!-- <img src="img_avatar.png" alt="Avatar" style="width: 100%" /> -->
-       
-        <div class="container">
-          <h4>
-            <b>{{ movie.img }}</b>
-          </h4>
-          <p>{{ movie.name }}</p>
-           <p>{{ movie.category }}</p>
-        </div>
+    <div class="card">
+      <div class="container">
+        <img :src="movieList.image" alt="Avatar" style="width: 100%" />
+      </div>
+      <div class="card-container">
+         <h1>{{ movieList.fullTitle }}</h1>
+        <p>Genres: {{ movieList.genres }}</p>
+        <p>Release Date: {{ movieList.releaseDate }}</p>
+        <p>Time: {{ movieList.runtimeStr }}</p>
+        <p>Imdb Ratings: {{ movieList.imDbRating }}</p>
+        <p>Imdb Votes: {{ movieList.imDbRatingVotes }}</p>
       </div>
     </div>
   </div>
@@ -23,35 +23,64 @@ export default {
   data: () => {
     return {
       movie: null,
-      movieList: [
-               { img: "0", name: "batman", category: "action" },
-        { img: "1", name: "spiderman", category: "drama" },
-        { img: "2", name: "batma", category: "thriller" },
-        { img: "3", name: "spiderma", category: "action" },
-        { img: "4", name: "batm", category: "drama" },
-        { img: "5", name: "spiderm", category: "thriller" },
-        { img: "6", name: "bat", category: "action" },
-      ],
+      movieList: [],
     };
   },
-  methods: {
-  },
-  created() {
-    this.movie = this.movieList.filter((movie) => {
-      return movie.img === this.movieId;
-    });
+  methods: {},
+  mounted() {
+    this.movieList = [];
+    this.$http
+      .get("https://imdb-api.com/en/API/Title/k_au2t6aps/" + this.movieId)
+      .then((response) => {
+        if (response.data) {
+          this.movieList = response.data;
+        }
+        console.log(response.data);
+      });
   },
 };
 </script>
 
 <style scoped>
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  width: 40%;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial;
 }
 
 .container {
+  position: relative;
+  margin: 2% auto;
+}
+
+.container img {
+  vertical-align: middle;
+}
+
+.container .content {
+  position: absolute;
+  bottom: 0;
+  background: rgb(0, 0, 0); 
+  background: rgba(0, 0, 0, 0.5); 
+  color: #f1f1f1;
+  width: 100%;
+  height: 20%;
+  padding: 0.5%;
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(5, 5, 5, 1);
+  transition: 0.3s;
+  margin-left: 10%;
+  width: 80%;
+}
+
+.card:hover {
+  box-shadow: 0 16px 32px 0 rgba(0,0,0,0.2);
+}
+
+.card-container {
   padding: 2px 16px;
 }
 </style>

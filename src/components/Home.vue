@@ -5,6 +5,7 @@
       <input
         type="text"
         id="searchbar"
+        v-on:keyup.enter="seatchMovie"
         v-model="searchMovieName"
         placeholder="Search movies..."
       />
@@ -12,54 +13,66 @@
       <select name="cars_id" @change="onChange($event)" class="category">
         <option value="null">Filtered By Category</option>
         <option value="action">Action</option>
-        <option value="drama">Drama</option>
-        <option value="thriller">Thriller</option>
+        <option value="animation">animation</option>
+        <option value="comedy">comedy</option>
+        <option value="crime">crime</option>
+        <option value="drama">drama</option>
+        <option value="family">family</option>
+        <option value="game_show">game_show</option>
+        <option value="history">history</option>
+        <option value="horror">horror</option>
+        <option value="music">music</option>
+        <option value="mystery">mystery</option>
+        <option value="romance">romance</option>
+        <option value="sci_fi">sci_fi</option>
+        <option value="thriller">thriller</option>
+        <option value="war">war</option>
       </select>
     </div>
 
     <div v-if="searchMovieName">
       <section class="grid-container">
         <RouterLink
-          v-for="(movie, index) in searchList"
-          :key="index"
-          :to="'/moviedetails/' + index"
+          v-for="movie in movieList"
+          :key="movie.id"
+          :to="'/moviedetails/' + movie.id"
         >
           <div class="card">
+            <img :src="movie.image" alt="Avatar" id="image" />
             <div class="container">
               <h4>
-                <b>{{ movie.img }}</b>
+                <b>{{ movie.title }}</b>
               </h4>
-              <h4>
-                <b>{{ movie.name }}</b>
-              </h4>
-              <p>Architect & Engineer</p>
+              <h5>
+                <b>Year: {{ movie.year }}</b>
+              </h5>
+              <p>IMDB Rating: {{ movie.imDbRating }}</p>
             </div>
           </div>
         </RouterLink>
       </section>
 
-      <div class="item error" v-if="searchMovieName && searchList.length === 0">
+      <div class="item error" v-if="searchMovieName && movieList.length === 0">
         <p>No results found!</p>
       </div>
     </div>
 
     <section class="grid-container" v-else>
       <RouterLink
-        v-for="(movie, index) in movieRender()"
-        :key="index"
-        :to="'/moviedetails/' + index"
+        v-for="movie in movieList"
+        :key="movie.id"
+        :to="'/moviedetails/' + movie.id"
       >
         <div class="card">
-          <!-- <img :src="movie.img" alt="Avatar" style="width: 100%" /> -->
-
+          <img :src="movie.image" alt="Avatar" id="image" />
           <div class="container">
             <h4>
-              <b>{{ movie.img }}</b>
+              <b>{{ movie.title }}</b>
             </h4>
-            <h4>
-              <b>{{ movie.name }}</b>
-            </h4>
-            <p>{{ movie.category }}</p>
+            <h5>
+              <b>Year: {{ movie.year }}</b>
+            </h5>
+            <p>IMDB Rating: {{ movie.imDbRating }}</p>
           </div>
         </div>
       </RouterLink>
@@ -74,50 +87,68 @@ export default {
     return {
       searchMovieName: null,
       filteredMovie: [],
-      movieList: [
-        { img: "0", name: "batman", category: "action" },
-        { img: "1", name: "spiderman", category: "drama" },
-        { img: "2", name: "batma", category: "thriller" },
-        { img: "3", name: "spiderma", category: "action" },
-        { img: "4", name: "batm", category: "drama" },
-        { img: "5", name: "spiderm", category: "thriller" },
-        { img: "6", name: "bat", category: "action" },
-      ],
+      movieList: [],
 
       onChange(e) {
         const category = e.target.value;
+        //   console.log(category)
 
-        if (category !== "null") {
-          this.movieList = this.movieList.filter((item) =>
-            item.category.includes(category)
-          );
-        } else {
-          this.movieList = [
-            { img: "0", name: "batman", category: "action" },
-            { img: "1", name: "spiderman", category: "drama" },
-            { img: "2", name: "batma", category: "thriller" },
-            { img: "3", name: "spiderma", category: "action" },
-            { img: "4", name: "batm", category: "drama" },
-            { img: "5", name: "spiderm", category: "thriller" },
-            { img: "6", name: "bat", category: "action" },
-          ];
-        }
-        this.movieRender();
+        //    this.movieList = this.movieList.filter((item) =>
+        //   item.genres === category
+        // );
+        this.$http
+          .get(
+            "https://imdb-api.com/API/AdvancedSearch/k_au2t6aps/?genres=" +
+              category
+          )
+          .then((response) => {
+            if (response.data.results) {
+              this.movieList = response.data.results;
+            }
+            console.log(response.data.results);
+          });
       },
     };
   },
-  computed: {
-    searchList() {
-      return this.movieList.filter((item) =>
-        item.name.toLowerCase().includes(this.searchMovieName.toLowerCase())
-      );
+  // computed: {
+  //   searchList() {
+  //     return this.movieList.filter((item) =>
+  //       item.name.toLowerCase().includes(this.searchMovieName.toLowerCase())
+  //     );
+  //     return this.movieList;
+  //   },
+  //   movieRender() {
+  //     return this.movieList;
+  //   },
+  // },
+  methods: {
+    seatchMovie() {
+      // this.movieList = this.movieList.filter((item) =>
+      //   item.title.toLowerCase().includes(this.searchMovieName.toLowerCase())
+      // );
+      this.$http
+        .get(
+          "https://imdb-api.com/en/API/Search/k_au2t6aps/" +
+            this.searchMovieName
+        )
+        .then((response) => {
+          if (response.data.results) {
+            this.movieList = response.data.results;
+          }
+          console.log(response.data.results);
+        });
     },
   },
-  methods: {
-    movieRender() {
-      return this.movieList;
-    },
-
+  mounted() {
+    this.movieList = [];
+    this.$http
+      .get("https://imdb-api.com/en/API/Top250Movies/k_au2t6aps")
+      .then((response) => {
+        if (response.data.items) {
+          this.movieList = response.data.items;
+        }
+        console.log(response.data.items);
+      });
   },
 };
 </script>
@@ -125,7 +156,7 @@ export default {
 <style scoped>
 #bgcolor {
   background-color: #d1d1d1;
-  height: 100vh;
+  height: auto;
 }
 
 #title {
@@ -142,11 +173,16 @@ export default {
   text-decoration: none;
 }
 
+#image {
+  padding-top: 10px;
+}
+
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   background-color: #fff;
   transition: 0.3s;
-  height: 150px;
+  height: 350px;
+  text-align: center;
   margin: 5%;
 }
 
@@ -162,7 +198,7 @@ export default {
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto auto auto;
   padding: 10px;
 }
 .grid-item {
@@ -224,6 +260,11 @@ input {
 }
 
 @media (max-width: 675px) {
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 10px;
+  }
   .grid-container-field {
     display: grid;
     grid-template-columns: auto;
