@@ -65,10 +65,10 @@ h2 {
   display: flex;
   align-items: center;
   background-color: #2d2d58;
-  
+  width: 100%;
 }
 
-#menu {
+#menu { 
   list-style-type: none;
   display: flex;
   align-items: center;

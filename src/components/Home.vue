@@ -64,7 +64,7 @@
         :to="'/moviedetails/' + movie.id"
       >
         <div class="card">
-          <img :src="movie.image" alt="Avatar" id="image" />
+          <img :src="movie.image" alt="Avatar" id="image" style="width: 128px; height: 186px;"/>
           <div class="container">
             <h4>
               <b>{{ movie.title }}</b>
@@ -257,10 +257,36 @@ input {
   padding: 10px;
 }
 
-@media (max-width: 675px) {
+@media (max-width: 1024px) {
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    padding: 10px;
+  }
+  .grid-container-field {
+    display: grid;
+    grid-template-columns: auto;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
   .grid-container {
     display: grid;
     grid-template-columns: auto auto;
+    padding: 10px;
+  }
+  .grid-container-field {
+    display: grid;
+    grid-template-columns: auto;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto;
     padding: 10px;
   }
   .grid-container-field {
