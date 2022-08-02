@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import data from "../api/data.js";
+import data from "../api/data.json";
 
 export default {
   name: "moviedetails",
@@ -38,12 +38,12 @@ export default {
     };
   },
   mounted() {
-    console.log(this.movieId);
+    // console.log(this.movieId);
 
     let movieData = data.filter((item) => item.id === this.movieId);
 
     this.movieList = movieData[0];
-    console.log(this.movieList);
+    // console.log(this.movieList);
     // this.$http
     //   .get("https://imdb-api.com/en/API/Title/k_au2t6aps/" + this.movieId)
     //   .then((response) => {
@@ -67,13 +67,8 @@ export default {
   text-align: center;
 }
 
-body {
-  font-family: Arial;
-}
-
 .container {
   position: relative;
-  margin: auto;
   padding: 2% 10%;
 }
 

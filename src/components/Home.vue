@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import data from "../api/data.js";
+import data from "../api/data.json";
 
 export default {
   name: "home",
@@ -136,7 +136,8 @@ export default {
     },
   },
   mounted() {
-    this.movieList = data;
+    console.log(data)
+    // this.movieList = data;
     // this.$http
     //   .get("https://imdb-api.com/en/API/Top250Movies/k_au2t6aps")
     //   .then((response) => {
@@ -156,7 +157,7 @@ export default {
 }
 
 #title {
-  margin-top: 0;
+
   color: #454571;
   text-align: center;
 }
@@ -174,10 +175,10 @@ export default {
 }
 
 .card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px 0 rgba(5,5,5,0.8);
   background-color: #fff;
   transition: 0.3s;
-  height: 350px;
+  height: 400px;
   text-align: center;
   margin: 5%;
 }
