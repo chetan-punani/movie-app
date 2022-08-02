@@ -136,16 +136,16 @@ export default {
     },
   },
   mounted() {
-    console.log(data)
+    // console.log(data) https://imdb-api.com/en/API/Top250Movies/k_au2t6aps
     // this.movieList = data;
-    // this.$http
-    //   .get("https://imdb-api.com/en/API/Top250Movies/k_au2t6aps")
-    //   .then((response) => {
-    //     if (response.data.items) {
-    //       this.movieList = response.data.items;
-    //     }
-    //     console.log(response.data.items);
-    //   });
+    this.$http
+      .get("https://github.com/chetan-punani/movie-app/blob/master/src/api/data.json")
+      .then((response) => {
+        // if (response.data.items) {
+        //   this.movieList = response.data.items;
+        // }
+        console.log(response);
+      });
   },
 };
 </script>
