@@ -1,4 +1,5 @@
-const data = [
+{ "data" :
+   [
     {
         "id": "tt0111161",
         "rank": "1",
@@ -239,6 +240,5 @@ const data = [
         "imDbRating": "8.6",
         "imDbRatingCount": "341675"
      }
-]
-
-export default data
+   ]
+   }

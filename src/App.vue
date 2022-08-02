@@ -22,6 +22,7 @@
     </div>
 
     <RouterView />
+
   </div>
 </template>
 
@@ -43,13 +44,12 @@ export default {
 </script>
 
 <style scoped>
-/* @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
 
-body {
-  margin: 0;
-  padding: 0;
+body, html {
   font-family: "Lato", sans-serif;
 }
+
 h1 {
   text-align: center;
   font-size: 36px;
@@ -58,7 +58,6 @@ h1 {
 h2 {
   padding-left: 15px;
   color: #fff;
-  margin: 0;
 }
 
 #navbar {
@@ -74,8 +73,6 @@ h2 {
   align-items: center;
   justify-content: end;
   width: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 .bar-items {
