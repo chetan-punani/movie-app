@@ -1,6 +1,5 @@
 <template>
-  <div id="bgcolor">
-    <!-- <h1 id="title">Latest Movies on MovieFlex</h1> -->
+  <div id="home-main">
     <div class="grid-container-field">
       <input
         type="text"
@@ -30,57 +29,86 @@
       </select>
     </div>
 
-    <!-- <div v-if="searchMovieName">
-      <section class="grid-container">
+    <div v-if="searchMovieName">
+      <div v-if="showSearachMovies">
         <RouterLink
-          v-for="movie in movieList"
+          v-for="movie in showSearachMovies"
           :key="movie.id"
           :to="'/moviedetails/' + movie.id"
         >
-          <div class="card">
-            <img :src="movie.image" alt="Avatar" id="image" />
-            <div class="container">
-              <h4>
-                <b>{{ movie.title }}</b>
-              </h4>
-              <h5>
-                <b>Year: {{ movie.year }}</b>
-              </h5>
-              <p>IMDB Rating: {{ movie.imDbRating }}</p>
-            </div>
-          </div>
+          <img :src="movie.image" alt="Avatar" id="image" />
         </RouterLink>
-      </section>
-
-      <div class="item error" v-if="searchMovieName && movieList.length === 0">
-        <p>No results found!</p>
       </div>
-    </div> -->
+      <div v-else>
+        <h2>No Result Found!!!</h2>
+      </div>
+    </div>
 
-    <section class="grid-container">
-      <RouterLink
-        v-for="movie in movieList"
-        :key="movie.id"
-        :to="'/moviedetails/' + movie.id"
-      >
-        <div class="card">
-          <img :src="movie.image" alt="Avatar" id="image" style="width: 128px; height: 186px;"/>
-          <div class="container">
-            <h4>
-              <b>{{ movie.title }}</b>
-            </h4>
-            <h5>
-              <b>Year: {{ movie.year }}</b>
-            </h5>
-            <p>IMDB Rating: {{ movie.imDbRating }}</p>
+    <div>
+      <div class="row mt-5 mb-5">
+        <div class="ml-10 d-flex justify-content-between">
+          <div>
+            <RouterLink to="/moremovies/latest"
+              ><h3>Latest & Trending</h3></RouterLink
+            >
           </div>
         </div>
-      </RouterLink>
-    </section>
+        <div class="row mt-3">
+          <div class="col">
+            <RouterLink
+              v-for="movie in showSomeMovies"
+              :key="movie.id"
+              :to="'/moviedetails/' + movie.id"
+            >
+              <img :src="movie.image" alt="Avatar" id="image" />
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5 mb-5">
+        <div class="ml-10 d-flex justify-content-between">
+          <div>
+            <RouterLink to="/moremovies/recommend"><h3>Movies Recommended For You</h3></RouterLink>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <RouterLink
+              v-for="movie in showSomeMovies"
+              :key="movie.id"
+              :to="'/moviedetails/' + movie.id"
+            >
+              <img :src="movie.image" alt="Avatar" id="image" />
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5 mb-5">
+        <div class="ml-10 d-flex justify-content-between">
+          <div>
+            <RouterLink to="/moremovies/genres"><h3>Popular Genres</h3></RouterLink>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <RouterLink
+              v-for="movie in showSomeMovies"
+              :key="movie.id"
+              :to="'/moviedetails/' + movie.id"
+            >
+              <img :src="movie.image" alt="Avatar" id="image" />
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import data from "../api/data.json";
 
 export default {
@@ -90,7 +118,17 @@ export default {
       searchMovieName: null,
       filteredMovie: [],
       movieList: [],
-
+      searchMovieList: [],
+      recomendMovieList: [],
+      genresMovieList: [],
+      settings: {
+        focusOnSelect: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 7,
+        slidesToScroll: 7,
+        touchThreshold: 16,
+      },
       onChange(e) {
         const category = e.target.value;
         console.log(category);
@@ -112,12 +150,20 @@ export default {
       },
     };
   },
+  computed: {
+    showSearachMovies() {
+      return this.searchMovieList.slice(0, 9);
+    },
+    showSomeMovies() {
+      return this.movieList.slice(0, 9);
+    },
+  },
   methods: {
     seatchMovie() {
       if (this.searchMovieName === " ") {
-        this.movieList = data;
+        this.searchMovieList = data;
       } else {
-        this.movieList = this.movieList.filter((item) =>
+        this.searchMovieList = this.movieList.filter((item) =>
           item.title.toLowerCase().includes(this.searchMovieName.toLowerCase())
         );
       }
@@ -138,77 +184,36 @@ export default {
   mounted() {
     // console.log(data) https://imdb-api.com/en/API/Top250Movies/k_au2t6aps
     // this.movieList = data;
-    this.$http
-      .get("https://github.com/chetan-punani/movie-app/blob/master/src/api/data.json")
+    Vue.axios
+      .get(
+        "https://raw.githubusercontent.com/chetan-punani/movie-app/master/src/api/data.json"
+      )
       .then((response) => {
-        // if (response.data.items) {
-        //   this.movieList = response.data.items;
-        // }
-        console.log(response);
+        if (response) {
+          if (response.data) {
+            this.movieList = response.data.data;
+          }
+        }
+      })
+      .catch((e) => {
+        console.log(e);
       });
   },
 };
 </script>
 
 <style scoped>
-#bgcolor {
-  background-color: #d1d1d1;
-  height: auto;
+#home-main {
+  padding: 0 3%;
 }
 
-#title {
-
-  color: #454571;
-  text-align: center;
-}
-
-.a :focus,
-:hover,
-:visited,
-:link,
-:active {
-  text-decoration: none;
-}
-
-#image {
-  padding-top: 10px;
-}
-
-.card {
-  box-shadow: 0 4px 8px 0 rgba(5,5,5,0.8);
-  background-color: #fff;
-  transition: 0.3s;
-  height: 400px;
-  text-align: center;
-  margin: 5%;
-}
-
-.card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  background-color: #454571;
-  color: #fff;
-}
-
-.container {
-  padding: 2px 16px;
-}
-
-.grid-container {
+.grid-container-field {
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
+  grid-template-columns: auto auto;
   padding: 10px;
-  grid-column-gap: 50px;
-  grid-row-gap: 10px;
-}
-.grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(229, 229, 229, 0.8);
-  padding: 20px;
-  font-size: 30px;
-  text-align: center;
 }
 
-input {
+#searchbar {
   display: block;
   width: auto;
   max-width: 350px;
@@ -221,20 +226,6 @@ input {
   border-radius: 5px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-}
-
-.item {
-  width: 350px;
-  margin: 0 auto 10px auto;
-  padding: 10px 20px;
-  color: white;
-  border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
-    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-}
-
-.error {
-  background-color: tomato;
 }
 
 .category {
@@ -252,18 +243,28 @@ input {
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
-.grid-container-field {
-  display: grid;
-  grid-template-columns: auto auto;
-  padding: 10px;
+a { text-decoration: none; color: black;}
+
+a:hover{
+  color: #1553c6;
+}
+
+#image {
+  width: 150px;
+  height: 200px;
+  margin: 0 3px;
+  transition: transform 0.2s;
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 10px;
+}
+
+#image:hover {
+  -ms-transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  transform: scale(1.2);
 }
 
 @media (max-width: 1024px) {
-  .grid-container {
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    padding: 10px;
-  }
   .grid-container-field {
     display: grid;
     grid-template-columns: auto;
@@ -272,11 +273,6 @@ input {
 }
 
 @media (max-width: 768px) {
-  .grid-container {
-    display: grid;
-    grid-template-columns: auto auto;
-    padding: 10px;
-  }
   .grid-container-field {
     display: grid;
     grid-template-columns: auto;
@@ -285,11 +281,6 @@ input {
 }
 
 @media (max-width: 480px) {
-  .grid-container {
-    display: grid;
-    grid-template-columns: auto;
-    padding: 10px;
-  }
   .grid-container-field {
     display: grid;
     grid-template-columns: auto;
