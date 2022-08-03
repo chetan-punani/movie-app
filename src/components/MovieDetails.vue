@@ -1,32 +1,57 @@
 <template>
-  <div class="center-screen"> 
-    <div class="card">
+  <section>
+    <div id="movie-detail">
       <div class="row">
-        <div class="col-6">
-          <div class="container">
-            <img
-              :src="movieList.image"
-              alt="Avatar"
-            />
+        <div class="col-6" id="movie-detail-text">
+          <div class="row">
+            <div class="col">
+              <div class="card-container">
+                <h1>{{ getMovie.fullTitle }}</h1>
+                <p>Genres: {{ getMovie.genres }}</p>
+                <p>Imdb Ratings: {{ getMovie.imDbRating }}</p>
+                <p>Imdb Votes: {{ getMovie.imDbRatingCount }}</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-6">
-          <div class="card-container">
-            <h1>{{ movieList.fullTitle }}</h1>
-            <p>Genres: {{ movieList.genres }}</p>
-            <!-- <p>Release Date: {{ movieList.releaseDate }}</p>
-        <p>Time: {{ movieList.runtimeStr }}</p> -->
-            <p>Imdb Ratings: {{ movieList.imDbRating }}</p>
-            <p>Imdb Votes: {{ movieList.imDbRatingCount }}</p>
+        <div class="col-6" id="movie-detail-img">
+          <img
+            :src="getMovie.image"
+            alt="Avatar"
+            class="enrounded float-end"
+            id="detailed-movie-img"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div id="more-movies">
+      <div class="row mt-5 mb-5">
+        <div class="d-flex justify-content-between">
+          <div>
+            <RouterLink to="/moremovies/likethis"
+              ><h3>More Like This</h3></RouterLink
+            >
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <RouterLink
+              v-for="movie in showSomeMovies"
+              :key="movie.id"
+              :to="'/moviedetails/' + movie.id"
+            >
+              <img :src="movie.image" alt="Avatar" id="image" />
+            </RouterLink>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
-import data from "../api/data.json";
+import Vue from "vue";
 
 export default {
   name: "moviedetails",
@@ -34,70 +59,100 @@ export default {
   data: () => {
     return {
       movie: null,
-      movieList: {},
+      movieList: [],
+      getMovie: [],
     };
   },
+  computed: {
+    showSomeMovies() {
+      return this.movieList.slice(0, 9);
+    },
+  },
+  methods: {
+    async getById() {
+      const response = await Vue.axios.get(
+        "https://raw.githubusercontent.com/chetan-punani/movie-app/master/src/api/data.json"
+      );
+      let temp = [];
+      if (response) {
+        if (response.data) {
+          temp = response.data.data;
+        }
+      }
+
+      this.movieList = temp;
+      temp = temp.filter((item) => item.id === this.movieId);
+      this.getMovie = temp[0];
+    },
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.getById();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    next();
+  },
   mounted() {
-    // console.log(this.movieId);
-
-    let movieData = data.filter((item) => item.id === this.movieId);
-
-    this.movieList = movieData[0];
-    // console.log(this.movieList);
-    // this.$http
-    //   .get("https://imdb-api.com/en/API/Title/k_au2t6aps/" + this.movieId)
-    //   .then((response) => {
-    //     if (response.data) {
-    //       this.movieList = response.data;
-    //     }
-    //     console.log(response.data);
-    //   });
+    this.getById();
   },
 };
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-}
-.center-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.container {
-  position: relative;
-  padding: 2% 10%;
-}
-
-.container img {
-  vertical-align: middle;
-}
-
-.container .content {
-  position: absolute;
-  bottom: 0;
-  background: rgb(0, 0, 0);
-  background: rgba(0, 0, 0, 0.5);
-  color: #f1f1f1;
-  width: 100%;
-  height: 20%;
-  padding: 0.5%;
-}
-.card {
+#movie-detail {
+  margin: 20px 10%;
   box-shadow: 0 4px 8px 0 rgba(5, 5, 5, 1);
-  transition: 0.3s;
-  margin-top: 3%;
-  width: 500px;
 }
 
-.card:hover {
-  box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+#movie-detail-text {
+  background-color: #030b17;
+}
+
+#movie-detail-img {
+  background: -webkit-linear-gradient(
+    to right,
+    rgba(3, 11, 23, 1),
+    rgba(142, 145, 151, 1)
+  );
+  background: linear-gradient(
+    to right,
+    rgba(3, 11, 23, 1),
+    rgba(142, 145, 151, 1)
+  );
 }
 
 .card-container {
-  padding: 2px 16px;
+  padding: 20px 25px;
+  color: #f1f1f1;
+}
+
+#detailed-movie-img {
+  height: 450px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  color: #1553c6;
+}
+
+#more-movies {
+  padding: 0 3%;
+}
+
+#image {
+  width: 150px;
+  height: 200px;
+  margin: 0 3px;
+  transition: transform 0.2s;
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 10px;
+}
+
+#image:hover {
+  -ms-transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  transform: scale(1.2);
 }
 </style>

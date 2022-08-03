@@ -1,26 +1,41 @@
 <template>
   <div>
-    <TheHeader id="header"></TheHeader>
-    <div class="content">
-      <RouterView />
-    </div>
-    <TheFooter></TheFooter>
-  </div>
+    <div id="navbar">
+      <div class="nav-brand">
+        <div id="menu">
+          <RouterLink to="/"><h2 id="title">MovieFelx</h2></RouterLink>
+        </div>
+        <i class="fa fa-navicon" v-on:click="display"></i>
+      </div>
 
-  <!-- <div>
-    k_au2t6aps
-    k_s9a1foud
-  </div> -->
+      <div class="bar-items" :class="{ hide: !show }">
+        <div id="menu">
+          <RouterLink to="/"> Home </RouterLink>
+
+          <!-- <RouterLink to="/about"> About </RouterLink>
+
+          <RouterLink to="/service"> Service </RouterLink>
+
+          <RouterLink to="/contact"> Contact Us </RouterLink> -->
+        </div>
+      </div>
+    </div>
+   
+  </div>
 </template>
 
 <script>
-import TheHeader from './components/TheHeader.vue'
-import TheFooter from "./components/TheFooter.vue";
-
 export default {
-  components: {
-    TheHeader,
-    TheFooter
+  name: "theheader",
+  data() {
+    return {
+      show: false,
+    };
+  },
+  methods: {
+    display() {
+      this.show = !this.show;
+    },
   },
 };
 </script>
@@ -38,10 +53,6 @@ export default {
   height: 80px;
   position: fixed;
   top: 0;
-}
-
-#header + .content {
-  padding-top: 80px;
 }
 
 #menu {
@@ -122,3 +133,4 @@ a {
   }
 }
 </style>
+
