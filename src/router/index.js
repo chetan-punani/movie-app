@@ -13,26 +13,26 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Homevue
+    component: Homevue,
   },
   {
-    path: '/moremovies/:category',
+    path: '/moremovies',
     name: 'moremovies',
     component: MoreMovies,
-    props: true,
-   
+    // /:category
+    // props: true,
   },
   {
     path: '/service',
     name: 'service',
-    component: ServiceVue 
-   
+    component: ServiceVue
+
   },
   {
     path: '/contact',
     name: 'contact',
-    component: ContactVue 
-   
+    component: ContactVue
+
   },
   {
     path: '/moviedetails/:movieId',

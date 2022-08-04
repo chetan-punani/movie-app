@@ -4,7 +4,7 @@
     <div class="content">
       <RouterView />
     </div>
-    <TheFooter></TheFooter>
+    <TheFooter id="footer"></TheFooter>
   </div>
 </template>
 
@@ -33,10 +33,6 @@ export default {
   height: 80px;
   position: fixed;
   top: 0;
-}
-
-#header + .content {
-  padding-top: 80px;
 }
 
 #menu {
@@ -73,8 +69,8 @@ a {
   color: #fff;
 }
 
-.fa {
-  display: none;
+#footer{
+  bottom: 0;
 }
 
 @media (max-width: 675px) {
