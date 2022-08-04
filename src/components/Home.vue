@@ -1,6 +1,6 @@
 <template>
   <div id="home-main">
-    <div class="grid-container-field">
+    <!-- <div class="grid-container-field">
       <input
         type="text"
         id="searchbar"
@@ -27,7 +27,7 @@
         <option value="thriller">thriller</option>
         <option value="war">war</option>
       </select>
-    </div>
+    </div> -->
 
     <div v-if="searchMovieName">
       <div v-if="showSearachMovies">
@@ -44,83 +44,23 @@
       </div>
     </div>
 
-    <div>
-      <div class="row mt-5 mb-5">
-        <div class="ml-10 d-flex justify-content-between">
-          <div>
-            <RouterLink to="/moremovies/latest"
-              ><h3>Latest & Trending</h3></RouterLink
-            >
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col">
-            <RouterLink
-              v-for="movie in showSomeMovies"
-              :key="movie.id"
-              :to="'/moviedetails/' + movie.id"
-            >
-              <img :src="movie.image" alt="Avatar" id="image" />
-            </RouterLink>
-          </div>
-        </div>
-      </div>
+    <Carousel name="Latest & Trending" value="latest-trending"></Carousel>
+    <Carousel name="Movies Recommended For You" value="recommend"></Carousel>
+    <Carousel name="Popular Genres" value="genres"></Carousel>
 
-      <div class="row mt-5 mb-5">
-        <div class="ml-10 d-flex justify-content-between">
-          <div>
-            <RouterLink to="/moremovies/recommend"
-              ><h3>Movies Recommended For You</h3></RouterLink
-            >
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col">
-            <RouterLink
-              v-for="movie in showSomeMovies"
-              :key="movie.id"
-              :to="'/moviedetails/' + movie.id"
-            >
-              <img :src="movie.image" alt="Avatar" id="image" />
-            </RouterLink>
-          </div>
-        </div>
-      </div>
-
-      <div class="row mt-5 mb-5">
-        <div class="ml-10 d-flex justify-content-between">
-          <div>
-            <RouterLink to="/moremovies/genres"
-              ><h3>Popular Genres</h3></RouterLink
-            >
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col">
-            <RouterLink
-              v-for="movie in showSomeMovies"
-              :key="movie.id"
-              :to="'/moviedetails/' + movie.id"
-            >
-              <img :src="movie.image" alt="Avatar" id="image" />
-            </RouterLink>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
 import data from "../api/data.json";
-// import TheCarosule from "./TheCarousel.vue";
+import Carousel from "./Carousel.vue";
 
 export default {
   name: "home",
   components: {
-    // TheCarosule,
-  },
+    Carousel
+},
   data: () => {
     return {
       searchMovieName: null,
@@ -188,40 +128,37 @@ export default {
       //     console.log(response.data.results);
       //   });
     },
+    async movieData() {
+      const response = await Vue.axios.get(
+        "https://movie-app-26981-default-rtdb.firebaseio.com/data.json"
+      );
+     
+      if (response) {
+        if (response.data) {
+           this.movieList = response.data;
+        }
+      }
+    },
   },
   mounted() {
-    // console.log(data) 
-    Vue.axios
-      .get(
-        "https://movie-app-26981-default-rtdb.firebaseio.com/data.json"
-      )
-      .then((response) => {
-        if (response) {
-          console.log(response)
-          if (response.data) {
-            this.movieList = response.data;
-          }
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    this.movieData();
   },
 };
 </script>
 
 <style scoped>
+
 #home-main {
   padding: 0 3%;
 }
 
-.grid-container-field {
+/* .grid-container-field {
   display: grid;
   grid-template-columns: auto auto;
   padding: 10px;
-}
+} */
 
-#searchbar {
+/* #searchbar {
   display: block;
   width: auto;
   max-width: 350px;
@@ -249,31 +186,7 @@ export default {
   border-radius: 5px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-}
-
-a {
-  text-decoration: none;
-  color: black;
-}
-
-a:hover {
-  color: #1553c6;
-}
-
-#image {
-  width: 150px;
-  height: 200px;
-  margin: 0 3px;
-  transition: transform 0.2s;
-  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  border-radius: 10px;
-}
-
-#image:hover {
-  -ms-transform: scale(1.2);
-  -webkit-transform: scale(1.2);
-  transform: scale(1.2);
-}
+} */
 
 @media (max-width: 1024px) {
   .grid-container-field {

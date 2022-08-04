@@ -25,37 +25,22 @@
       </div>
     </div>
 
-    <div id="more-movies">
-      <div class="row mt-5 mb-5">
-        <div class="d-flex justify-content-between">
-          <div>
-            <RouterLink to="/moremovies/likethis"
-              ><h3>More Like This</h3></RouterLink
-            >
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col">
-            <RouterLink
-              v-for="movie in showSomeMovies"
-              :key="movie.id"
-              :to="'/moviedetails/' + movie.id"
-            >
-              <img :src="movie.image" alt="Avatar" id="image" />
-            </RouterLink>
-          </div>
-        </div>
-      </div>
+    <div id="carousel-padding">
+      <Carousel name="More Like This" value="likethis"></Carousel>
     </div>
   </section>
 </template>
 
 <script>
 import Vue from "vue";
+import Carousel from "./Carousel.vue";
 
 export default {
   name: "moviedetails",
   props: ["movieId"],
+  components: {
+    Carousel,
+  },
   data: () => {
     return {
       movie: null,
@@ -92,7 +77,7 @@ export default {
   },
   mounted() {
     this.getById();
-     window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   },
 };
 </script>
@@ -155,5 +140,9 @@ a:hover {
   -ms-transform: scale(1.2);
   -webkit-transform: scale(1.2);
   transform: scale(1.2);
+}
+
+#carousel-padding{
+  padding: 0 3%;
 }
 </style>
