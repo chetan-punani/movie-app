@@ -6,11 +6,6 @@
     </div>
     <TheFooter></TheFooter>
   </div>
-
-  <!-- <div>
-    k_au2t6aps
-    k_s9a1foud
-  </div> -->
 </template>
 
 <script>

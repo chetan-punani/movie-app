@@ -3,7 +3,7 @@
     <div id="navbar">
       <div class="nav-brand">
         <div id="menu">
-          <RouterLink to="/"><h2 id="title">MovieFelx</h2></RouterLink>
+          <RouterLink to="/"><h2 id="title">MovieFlex</h2></RouterLink>
         </div>
         <i class="fa fa-navicon" v-on:click="display"></i>
       </div>
