@@ -71,12 +71,12 @@ export default {
   methods: {
     async getById() {
       const response = await Vue.axios.get(
-        "https://raw.githubusercontent.com/chetan-punani/movie-app/master/src/api/data.json"
+        "https://movie-app-26981-default-rtdb.firebaseio.com/data.json"
       );
       let temp = [];
       if (response) {
         if (response.data) {
-          temp = response.data.data;
+          temp = response.data;
         }
       }
 
@@ -92,6 +92,7 @@ export default {
   },
   mounted() {
     this.getById();
+     window.scrollTo({ top: 0, behavior: "smooth" });
   },
 };
 </script>

@@ -69,7 +69,9 @@
       <div class="row mt-5 mb-5">
         <div class="ml-10 d-flex justify-content-between">
           <div>
-            <RouterLink to="/moremovies/recommend"><h3>Movies Recommended For You</h3></RouterLink>
+            <RouterLink to="/moremovies/recommend"
+              ><h3>Movies Recommended For You</h3></RouterLink
+            >
           </div>
         </div>
         <div class="row mt-3">
@@ -88,7 +90,9 @@
       <div class="row mt-5 mb-5">
         <div class="ml-10 d-flex justify-content-between">
           <div>
-            <RouterLink to="/moremovies/genres"><h3>Popular Genres</h3></RouterLink>
+            <RouterLink to="/moremovies/genres"
+              ><h3>Popular Genres</h3></RouterLink
+            >
           </div>
         </div>
         <div class="row mt-3">
@@ -110,9 +114,13 @@
 <script>
 import Vue from "vue";
 import data from "../api/data.json";
+// import TheCarosule from "./TheCarousel.vue";
 
 export default {
   name: "home",
+  components: {
+    // TheCarosule,
+  },
   data: () => {
     return {
       searchMovieName: null,
@@ -182,16 +190,16 @@ export default {
     },
   },
   mounted() {
-    // console.log(data) https://imdb-api.com/en/API/Top250Movies/k_au2t6aps
-    // this.movieList = data;
+    // console.log(data) 
     Vue.axios
       .get(
-        "https://raw.githubusercontent.com/chetan-punani/movie-app/master/src/api/data.json"
+        "https://movie-app-26981-default-rtdb.firebaseio.com/data.json"
       )
       .then((response) => {
         if (response) {
+          console.log(response)
           if (response.data) {
-            this.movieList = response.data.data;
+            this.movieList = response.data;
           }
         }
       })
@@ -243,9 +251,12 @@ export default {
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
-a { text-decoration: none; color: black;}
+a {
+  text-decoration: none;
+  color: black;
+}
 
-a:hover{
+a:hover {
   color: #1553c6;
 }
 
