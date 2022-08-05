@@ -2,7 +2,7 @@
   <section>
     <div id="movie-detail">
       <div class="row">
-        <div class="col-6" id="movie-detail-text">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" id="movie-detail-text">
           <div class="row">
             <div class="col">
               <div class="card-container">
@@ -14,7 +14,7 @@
             </div>
           </div>
         </div>
-        <div class="col-6" id="movie-detail-img">
+        <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12" id="movie-detail-img">
           <img
             :src="getMovie.image"
             alt="Avatar"
@@ -111,7 +111,8 @@ export default {
 }
 
 #detailed-movie-img {
-  height: 450px;
+  min-height: 400px;
+  min-width: auto;
 }
 
 a {
