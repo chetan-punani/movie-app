@@ -5,7 +5,7 @@
         <!-- <RouterLink :to="'/moremovies/' + value"
           ><h3>{{ name }}</h3></RouterLink
         > -->
-        {{ name }}
+        <h3>{{ name }}</h3>
       </div>
     </div>
     <div class="row mt-3">
@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import Vue from "vue";
+import axios from "axios";
+
 export default {
   name: "carousle",
   props: ["name", "value"],
@@ -36,26 +37,28 @@ export default {
   },
   computed: {
     showSomeMovies() {
-      return this.movieList.slice(0,  this.noOfImg);
+      return this.movieList.slice(0, this.noOfImg);
     },
   },
   methods: {
     async movieData() {
-      const response = await Vue.axios.get(
-        "https://movie-app-26981-default-rtdb.firebaseio.com/data.json"
-      );
-
-      if (response) {
-        if (response.data) {
-          this.movieList = response.data;
-        }
-      }
+      await axios
+        .get("https://movie-app-26981-default-rtdb.firebaseio.com/data.json")
+        .then((response) => {
+          if (response) {
+            if (response.data) {
+              this.movieList = response.data;
+            }
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     typeMovie(value) {
       this.$router.push({ path: "/moremovies", query: { type: value } });
     },
     onResize() {
-
       if (window.innerWidth > 1400) {
         this.noOfImg = 9;
       } else if (window.innerWidth <= 1400 && window.innerWidth > 1200) {
@@ -107,53 +110,4 @@ a:hover {
   -webkit-transform: scale(1.2);
   transform: scale(1.2);
 }
-/* 
-@media (max-width: 1400px) {
-  #image {
-    width: 130px;
-    height: 180px;
-  }
-}
-
-@media (max-width: 1330px) {
-  #image {
-    width: 110px;
-    height: 160px;
-  }
-}
-
-@media (max-width: 1140px) {
-  #image {
-    width: 90px;
-    height: 130px;
-  }
-}
-
-@media (max-width: 950px) {
-  #image {
-    width: 70px;
-    height: 110px;
-  }
-}
-
-@media (max-width: 760px) {
-  #image {
-    width: 60px;
-    height: 85px;
-  }
-}
-
-@media (max-width: 660px) {
-  #image {
-    width: 50px;
-    height: 75px;
-  }
-}
-
-@media (max-width: 560px) {
-  #image {
-    width: 40px;
-    height: 65px;
-  }
-} */
 </style>

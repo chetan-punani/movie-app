@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import Vue from "vue";
+import axios from "axios";
 
 export default {
   name: "moremovies",
@@ -105,15 +105,18 @@ export default {
   },
   methods: {
     async movieData() {
-      const response = await Vue.axios.get(
-        "https://movie-app-26981-default-rtdb.firebaseio.com/data.json"
-      );
-
-      if (response) {
-        if (response.data) {
-          this.movieList = response.data;
-        }
-      }
+      await axios
+        .get("https://movie-app-26981-default-rtdb.firebaseio.com/data.json")
+        .then((response) => {
+          if (response) {
+            if (response.data) {
+              this.movieList = response.data;
+            }
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     onUpdate() {
       this.searchGerneList();

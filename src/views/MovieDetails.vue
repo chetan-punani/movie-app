@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import Vue from "vue";
-import Carousel from "./Carousel.vue";
+import axios from 'axios'
+import Carousel from "../components/Carousel.vue";
 
 export default {
   name: "moviedetails",
@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     async getById() {
-      const response = await Vue.axios.get(
+      const response = await axios.get(
         "https://movie-app-26981-default-rtdb.firebaseio.com/data.json"
       );
       let temp = [];
