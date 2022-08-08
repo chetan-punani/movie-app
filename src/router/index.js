@@ -1,11 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import HomeView from '../views/HomeView.vue'
-import MoreMovies from '../components/MoreMovies.vue'
-import ContactVue from '../components/Contact.vue'
-import ServiceVue from '../components/Service.vue'
-import Homevue from '../components/Home.vue'
-import MovieDetails from '../components/MovieDetails.vue'
+import Home from '../views/Home.vue'
+import MoreMovies from '../views/MoreMovies.vue'
+import MovieDetails from '../views/MovieDetails.vue'
 
 Vue.use(VueRouter)
 
@@ -13,26 +10,12 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Homevue,
+    component: Home,
   },
   {
     path: '/moremovies',
     name: 'moremovies',
-    component: MoreMovies,
-    // /:category
-    // props: true,
-  },
-  {
-    path: '/service',
-    name: 'service',
-    component: ServiceVue
-
-  },
-  {
-    path: '/contact',
-    name: 'contact',
-    component: ContactVue
-
+    component: MoreMovies
   },
   {
     path: '/moviedetails/:movieId',

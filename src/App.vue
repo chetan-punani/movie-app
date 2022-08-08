@@ -1,7 +1,7 @@
 <template>
   <div>
-    <TheHeader id="header"></TheHeader>
-    <div class="content">
+    <TheHeader></TheHeader>
+    <div>
       <RouterView />
     </div>
     <TheFooter id="footer"></TheFooter>
@@ -25,91 +25,9 @@ export default {
   font-family: "Comfortaa", cursive;
 }
 
-#navbar {
-  display: flex;
-  align-items: center;
-  background-color: #131a27;
-  width: 100%;
-  height: 80px;
-  position: fixed;
-  top: 0;
-}
-
-#menu {
-  list-style-type: none;
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  width: 100%;
-}
-
-#title {
-  text-align: center;
-  font-size: 26px;
-  text-transform: capitalize;
-  padding-left: 15px;
-  color: #fff;
-}
-
-.bar-items {
-  width: 100%;
-}
-
-a {
-  padding: 20px;
-}
-
-li:hover {
-  background-color: #8d99cf;
-}
-
-a {
-  text-decoration: none;
-  font-size: 18px;
-  color: #fff;
-}
-
 #footer{
   bottom: 0;
 }
 
-@media (max-width: 675px) {
-  #navbar {
-    flex-direction: column;
-  }
 
-  .fa {
-    display: block;
-    padding: 0 25px;
-    position: absolute;
-    right: 0;
-    color: #fff;
-    font-size: 30px;
-    cursor: pointer;
-  }
-
-  #menu {
-    flex-direction: column;
-    padding: 5px 0;
-  }
-
-  a {
-    text-align: center;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 15px;
-  }
-
-  .hide {
-    display: none;
-  }
-  .nav-brand {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px 0px;
-    background-color: #2d2d58;
-  }
-}
 </style>
