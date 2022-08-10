@@ -37,19 +37,40 @@
                 Gernes
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li v-for="(list, index) in gernes" :key="index" @click="gerneMovie(list.value)">
+                <li
+                  v-for="(list, index) in gernes"
+                  :key="index"
+                  @click="gerneMovie(list.value)"
+                >
                   <!-- <RouterLink
                     :to="'/moremovies' + list.value"
                     class="dropdown-item"
                     >{{ list.name }}</RouterLink
                   > -->
-                  {{list.name}}
+                  {{ list.name }}
                 </li>
                 <!-- <li><hr class="dropdown-divider" /></li> -->
               </ul>
             </li>
           </ul>
-          <div class="d-flex" >
+
+          <div id="auth-div">
+            <div class="d-flex" v-if="!isLoggedIn">
+              <RouterLink to="/login" class="text-white">
+                <button class="btn btn-outline-white text-white">Login</button>
+              </RouterLink>
+            </div>
+            <div class="d-flex text-white" v-if="isLoggedIn">
+              <button
+                class="btn btn-outline-white text-white"
+                @click="handleSignOut"
+              >
+                Signout
+              </button>
+            </div>
+          </div>
+
+          <div class="d-flex">
             <input
               class="form-control me-2"
               type="text"
@@ -57,7 +78,12 @@
               placeholder="Search"
               aria-label="Search"
             />
-            <button class="btn btn-outline-white text-white" @click="searchMovie">Search</button>
+            <button
+              class="btn btn-outline-white text-white"
+              @click="searchMovie"
+            >
+              Search
+            </button>
           </div>
         </div>
       </div>
@@ -66,10 +92,14 @@
 </template>
 
 <script>
+import router from "@/router";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 export default {
   name: "theheader",
   data() {
     return {
+      auth: getAuth(),
+      isLoggedIn: null,
       searchMovieName: "",
       gernes: [
         {
@@ -80,7 +110,7 @@ export default {
           name: "Animation",
           value: "animation",
         },
-         {
+        {
           name: "Comedy",
           value: "comedy",
         },
@@ -88,7 +118,7 @@ export default {
           name: "Crime",
           value: "crime",
         },
-         {
+        {
           name: "Drama",
           value: "drama",
         },
@@ -96,7 +126,7 @@ export default {
           name: "Family",
           value: "family",
         },
-         {
+        {
           name: "Game Show",
           value: "gameshow",
         },
@@ -104,7 +134,7 @@ export default {
           name: "History",
           value: "history",
         },
-         {
+        {
           name: "Horror",
           value: "Horror",
         },
@@ -112,7 +142,7 @@ export default {
           name: "Mystery",
           value: "mystery",
         },
-         {
+        {
           name: "Romance",
           value: "romance",
         },
@@ -120,7 +150,7 @@ export default {
           name: "Sci-Fi",
           value: "scifi",
         },
-         {
+        {
           name: "Thriller",
           value: "thriller",
         },
@@ -133,16 +163,34 @@ export default {
   },
   methods: {
     searchMovie() {
-      this.$router.push({ path: "/moremovies" , query: { search: this.searchMovieName } });
-      this.searchMovieName= "";
+      this.$router.push({
+        path: "/moremovies",
+        query: { search: this.searchMovieName },
+      });
+      this.searchMovieName = "";
     },
     gerneMovie(value) {
-      this.$router.push({ path: "/moremovies" , query: { gerne: value } });
-    }
+      this.$router.push({ path: "/moremovies", query: { gerne: value } });
+    },
+    handleSignOut() {
+      signOut(this.auth).then(() => {
+        router.push("/login");
+        window.location.reload();
+      });
+    },
   },
-   beforeRouteUpdate(to, from, next) {
-    this.searchMovie();
+  beforeRouteUpdate(to, from, next) {
+    // this.searchMovie();
     next();
+  },
+  mounted() {
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        this.isLoggedIn = true;
+      } else {
+        this.isLoggedIn = false;
+      }
+    });
   },
 };
 </script>
@@ -160,6 +208,14 @@ export default {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 .navbar-toggler {
-  border-color: rgb(255,255,255);
+  border-color: rgb(255, 255, 255);
+}
+
+a {
+  text-decoration: none;
+}
+
+#auth-div {
+  margin-right: 20px;
 }
 </style>
