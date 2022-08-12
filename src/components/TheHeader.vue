@@ -47,28 +47,12 @@
                     class="dropdown-item"
                     >{{ list.name }}</RouterLink
                   > -->
-                  {{ list.name }}
+                  <button class="btn">{{ list.name }}</button>
                 </li>
                 <!-- <li><hr class="dropdown-divider" /></li> -->
               </ul>
             </li>
           </ul>
-
-          <div id="auth-div">
-            <div class="d-flex" v-if="!isLoggedIn">
-              <RouterLink to="/login" class="text-white">
-                <button class="btn btn-outline-white text-white">Login</button>
-              </RouterLink>
-            </div>
-            <div class="d-flex text-white" v-if="isLoggedIn">
-              <button
-                class="btn btn-outline-white text-white"
-                @click="handleSignOut"
-              >
-                Signout
-              </button>
-            </div>
-          </div>
 
           <div class="d-flex">
             <input
@@ -84,6 +68,50 @@
             >
               Search
             </button>
+          </div>
+
+          <div id="auth-div">
+            <div class="d-flex" v-if="!isLoggedIn">
+              <RouterLink to="/login" class="text-white">
+                <button class="btn btn-outline-white text-white">Login</button>
+              </RouterLink>
+            </div>
+            <div class="d-flex text-white" v-if="isLoggedIn">
+              <!-- <button
+                class="btn btn-outline-white text-white"
+                @click="handleSignOut"
+              >
+                Signout
+              </button> -->
+
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle text-white"
+                    href="#"
+                    id="navbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    User
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li class="btn">
+                        <RouterLink to="/user-profile">Profile</RouterLink>
+                    </li>
+                    <li>
+                      <button
+                        class="btn"
+                        @click="handleSignOut"
+                      >
+                        Signout
+                      </button>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -211,11 +239,16 @@ export default {
   border-color: rgb(255, 255, 255);
 }
 
-a {
+a, :hover {
   text-decoration: none;
+  color: black;
 }
+
 
 #auth-div {
   margin-right: 20px;
+}
+.dropdown-menu {
+  margin-right: 50px;
 }
 </style>
