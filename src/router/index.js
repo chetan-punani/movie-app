@@ -5,6 +5,7 @@ import MoreMovies from '../views/MoreMovies.vue'
 import MovieDetails from '../views/MovieDetails.vue'
 import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
+import UserProfile from '../views/Profile.vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 Vue.use(VueRouter)
@@ -38,6 +39,11 @@ const routes = [
     path: '/signup',
     name: 'signup',
     component: SignUp,
+  },
+  {
+    path: '/user-profile',
+    name: 'user-profile',
+    component: UserProfile,
   },
 ]
 
