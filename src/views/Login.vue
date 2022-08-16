@@ -62,7 +62,7 @@
           <router-link to="/signup">create one</router-link>.
         </div>
 
-        <button type="submit" class="btn btn-primary">LogIn</button>
+        <button type="submit" class="btn btn-primary" id="btn">LogIn</button>
         <button type="reset" class="btn btn-success mx-3">Reset</button>
       </form>
     </div>
@@ -178,5 +178,10 @@ export default {
 
 .error-message {
   color: red;
+}
+
+#btn{
+  background-color: #131a27;
+  color: white;
 }
 </style>
