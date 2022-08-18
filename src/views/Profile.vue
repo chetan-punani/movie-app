@@ -65,8 +65,7 @@
 
 <script>
 /* eslint-disable no-useless-escape */
-import { getDatabase, ref, child, get, update } from "firebase/database";
-import { getAuth } from "firebase/auth";
+
 
 export default {
   name: "SignUp",
@@ -160,23 +159,7 @@ export default {
     },
     handleUpdate() {
       if (this.error.email === "" && this.error.password === "") {
-        const user = getAuth().currentUser;
-        if (user) {
-          const data = {
-            uid: user.uid,
-            email: this.form.email,
-            password: this.form.password,
-          };
-
-          const db = getDatabase();
-          const updates = {};
-          updates["/users/" + user.uid] = data;
-          update(ref(db), updates);
-
-          alert("* Update Successfully !!!");
-        } else {
-          // No user is signed in.
-        }
+        console.log("=")
       } else {
         alert("* Please Enter valid email and password then try again !!!");
       }

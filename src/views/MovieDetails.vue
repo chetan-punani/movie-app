@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import { getMoviesById } from '../api/movie'
 import Carousel from "../components/Carousel.vue";
 
 export default {
@@ -68,6 +69,18 @@ export default {
       this.movieList = temp;
       temp = temp.filter((item) => item.id === this.movieId);
       this.getMovie = temp[0];
+
+      getMoviesById(this.movieId)
+      .then( (response) => {
+         if (response) {
+            if (response.data) {
+              this.getMovie = response.data;
+            }
+          }
+      })
+      .catch( (e) => {
+        console.log(e);
+      } ) 
     },
   },
   beforeRouteUpdate(to, from, next) {

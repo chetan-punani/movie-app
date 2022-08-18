@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { getAllMovies } from '../api/movie'
 
 export default {
   props: ["callFun"],
@@ -94,18 +94,19 @@ export default {
   },
   methods: {
     async movieData() {
-      await axios
-        .get("https://movie-app-26981-default-rtdb.firebaseio.com/data.json")
-        .then((response) => {
-          if (response) {
+       await getAllMovies()
+      .then( (response) => {
+         if (response) {
             if (response.data) {
-              this.movieList = response.data;
+               this.movieList = Object.keys(response.data).map((key) => {
+                return response.data[key];
+              });
             }
           }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      })
+      .catch( (e) => {
+        console.log(e);
+      } ) 
     },
     onUpdate() {
       this.searchGerneList();

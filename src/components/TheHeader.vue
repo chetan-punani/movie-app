@@ -71,19 +71,12 @@
           </div>
 
           <div id="auth-div">
-            <div class="d-flex" v-if="!isLoggedIn">
+            <div class="d-flex" v-if="isLoggedIn">
               <RouterLink to="/login" class="text-white">
                 <button class="btn btn-outline-white text-white">Login</button>
               </RouterLink>
             </div>
-            <div class="d-flex text-white" v-if="isLoggedIn">
-              <!-- <button
-                class="btn btn-outline-white text-white"
-                @click="handleSignOut"
-              >
-                Signout
-              </button> -->
-
+            <div class="d-flex text-white" v-else>
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
                   <a
@@ -98,13 +91,10 @@
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li class="btn">
-                        <RouterLink to="/user-profile">Profile</RouterLink>
+                      <RouterLink to="/user-profile">Profile</RouterLink>
                     </li>
                     <li>
-                      <button
-                        class="btn"
-                        @click="handleSignOut"
-                      >
+                      <button class="btn" @click="handleSignOut">
                         Signout
                       </button>
                     </li>
@@ -120,73 +110,16 @@
 </template>
 
 <script>
-import router from "@/router";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import Cookies from "js-cookie";
+import gernesData from "../utils/gernes.js";
+
 export default {
   name: "theheader",
   data() {
     return {
-      auth: getAuth(),
-      isLoggedIn: null,
+      isLoggedIn: true,
       searchMovieName: "",
-      gernes: [
-        {
-          name: "Action",
-          value: "action",
-        },
-        {
-          name: "Animation",
-          value: "animation",
-        },
-        {
-          name: "Comedy",
-          value: "comedy",
-        },
-        {
-          name: "Crime",
-          value: "crime",
-        },
-        {
-          name: "Drama",
-          value: "drama",
-        },
-        {
-          name: "Family",
-          value: "family",
-        },
-        {
-          name: "Game Show",
-          value: "gameshow",
-        },
-        {
-          name: "History",
-          value: "history",
-        },
-        {
-          name: "Horror",
-          value: "Horror",
-        },
-        {
-          name: "Mystery",
-          value: "mystery",
-        },
-        {
-          name: "Romance",
-          value: "romance",
-        },
-        {
-          name: "Sci-Fi",
-          value: "scifi",
-        },
-        {
-          name: "Thriller",
-          value: "thriller",
-        },
-        {
-          name: "War",
-          value: "war",
-        },
-      ],
+      gernes: gernesData,
     };
   },
   methods: {
@@ -201,24 +134,27 @@ export default {
       this.$router.push({ path: "/moremovies", query: { gerne: value } });
     },
     handleSignOut() {
-      signOut(this.auth).then(() => {
-        router.push("/login");
-        window.location.reload();
-      });
+      Cookies.remove('refreshToken')
+      Cookies.remove('idToken')
+      this.$router.push("/");
+      window.location.reload();
     },
   },
   beforeRouteUpdate(to, from, next) {
     // this.searchMovie();
+     
     next();
   },
   mounted() {
-    onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        this.isLoggedIn = true;
-      } else {
-        this.isLoggedIn = false;
-      }
-    });
+   const refreshtoken = Cookies.get("refreshToken");
+    const token = Cookies.get("idToken");
+    console.log(refreshtoken)
+    console.log(token)
+    if (token && refreshtoken) {
+      this.isLoggedIn = false;
+    } else {
+      this.isLoggedIn = true;
+    }
   },
 };
 </script>
@@ -239,11 +175,10 @@ export default {
   border-color: rgb(255, 255, 255);
 }
 
-a, :hover {
+a,
+:hover {
   text-decoration: none;
-  color: black;
 }
-
 
 #auth-div {
   margin-right: 20px;

@@ -22,9 +22,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import data from "../api/data.json";
 import Carousel from "../components/Carousel.vue";
+import { getAllMovies } from '../api/movie'
 
 export default {
   name: "home",
@@ -36,24 +35,6 @@ export default {
       searchMovieName: null,
       movieList: [],
       searchMovieList: [],
-      onChange(e) {
-        const category = e.target.value;
-        this.movieList = data;
-        this.movieList = this.movieList.filter(
-          (item) => item.genres === category
-        );
-        // axios
-        //   .get(
-        //     "https://imdb-api.com/API/AdvancedSearch/k_au2t6aps/?genres=" +
-        //       category
-        //   )
-        //   .then((response) => {
-        //     if (response.data.results) {
-        //       this.movieList = response.data.results;
-        //     }
-        //     console.log(response.data.results);
-        //   });
-      },
     };
   },
   computed: {
@@ -65,40 +46,21 @@ export default {
     },
   },
   methods: {
-    seatchMovie() {
-      if (this.searchMovieName === " ") {
-        this.searchMovieList = data;
-      } else {
-        this.searchMovieList = this.movieList.filter((item) =>
-          item.title.toLowerCase().includes(this.searchMovieName.toLowerCase())
-        );
-      }
-
-      // axios
-      //   .get(
-      //     "https://imdb-api.com/en/API/Search/k_au2t6aps/" +
-      //       this.searchMovieName
-      //   )
-      //   .then((response) => {
-      //     if (response.data.results) {
-      //       this.movieList = response.data.results;
-      //     }
-      //     console.log(response.data.results);
-      //   });
-    },
     async movieData() {
-      await axios
-        .get("https://movie-app-26981-default-rtdb.firebaseio.com/data.json")
-        .then((response) => {
-          if (response) {
+      await getAllMovies()
+      .then( (response) => {
+         if (response) {
             if (response.data) {
-              this.movieList = response.data;
+               this.movieList = Object.keys(response.data).map((key) => {
+                return response.data[key];
+              });
             }
           }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      })
+      .catch( (e) => {
+        console.log(e);
+      } ) 
+     
     },
   },
   mounted() {

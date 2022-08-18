@@ -86,7 +86,9 @@
         <div class="mb-3 form-check">
           Go back to <router-link to="/login">login</router-link>.
         </div>
-        <button type="submit" class="btn btn-primary" id="btn">Create Account</button>
+        <button type="submit" class="btn btn-primary" id="btn">
+          Create Account
+        </button>
         <button type="reset" class="btn btn-success mx-3">Reset</button>
       </form>
     </div>
@@ -95,8 +97,8 @@
 
 <script>
 /* eslint-disable no-useless-escape */
-import { getDatabase, ref, set } from "firebase/database";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { signUpWithFirebase } from "../api/auth";
+import Cookies from "js-cookie";
 
 export default {
   name: "SignUp",
@@ -190,33 +192,16 @@ export default {
     handleSignUp() {
       if (this.error.email === "" && this.error.password === "") {
         if (this.password === this.confirmPassword) {
-          createUserWithEmailAndPassword(
-            getAuth(),
-            this.form.email,
-            this.form.password
-          )
-            .then(() => {
-              const user = getAuth().currentUser;
-              if (user) {
-                const data = {
-                  uid: user.uid,
-                  email: this.form.email,
-                  password: this.form.password,
-                };
-                const db = getDatabase();
-                set(ref(db, "users/" + user.uid), data)
-                  .then(() => {
-                    this.$router.replace("/login");
-                  })
-                  .catch((e) => {
-                    console.log(e);
-                  });
-              } else {
-                // No user is signed in.
-              }
+          signUpWithFirebase(this.email, this.password)
+            .then((response) => {
+              Cookies.set("idToken", response.data.idToken, { expires: 1 / 1440 });
+              Cookies.set("refreshToken", response.data.refreshToken, {
+                expires: 365,
+              });
+              this.$router.push({ name: "login" });
             })
-            .catch((error) => {
-              console.log(error);
+            .catch((err) => {
+              console.log(err.code);
             });
         } else {
           alert("* password and confirm password did not match.");
@@ -245,7 +230,7 @@ export default {
   color: red;
 }
 
-#btn{
+#btn {
   background-color: #131a27;
   color: white;
 }

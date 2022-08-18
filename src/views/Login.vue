@@ -71,7 +71,8 @@
 
 <script>
 /* eslint-disable no-useless-escape */
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { loginWithFirebase } from "../api/auth";
+import Cookies from "js-cookie";
 
 export default {
   name: "Login",
@@ -132,30 +133,15 @@ export default {
     },
     handleLogin() {
       if (this.error.email === "" && this.error.password === "") {
-        signInWithEmailAndPassword(
-          getAuth(),
-          this.form.email,
-          this.form.password
-        )
-          .then(() => {
-            this.$router.replace("/");
-          })
-          .catch((error) => {
-            switch (error.code) {
-              case "auth/invalid-email":
-                this.error["submit"] = "Invalid Email";
-                break;
-              case "auth/user-not-found":
-                this.error["submit"] = "No account with that email was found";
-                break;
-              case "auth/wrong-password":
-                this.error["submit"] = "Incorrect Password";
-                break;
-              default:
-                this.error["submit"] = "Invalid Email or Password";
-                break;
-            }
-          });
+       loginWithFirebase(this.form.email, this.form.password)
+        .then((response) => {
+          Cookies.set("idToken", response.data.idToken, { expires: 1 / 1440 });
+          Cookies.set("refreshToken", response.data.refreshToken, { expires: 365 });
+          this.$router.push({ name: "home" });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       } else {
         alert("* Please Enter valid email and password then try again !!!");
       }

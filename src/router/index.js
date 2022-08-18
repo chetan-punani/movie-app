@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Cookies from "js-cookie";
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import MoreMovies from '../views/MoreMovies.vue'
@@ -6,7 +7,6 @@ import MovieDetails from '../views/MovieDetails.vue'
 import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import UserProfile from '../views/Profile.vue'
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 Vue.use(VueRouter)
 
@@ -49,26 +49,14 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes
 })
 
-const getCurrentUser = () => {
-  return new Promise((resolve, reject) => {
-    const removeListener = onAuthStateChanged(
-      getAuth(),
-      (user) => {
-        removeListener();
-        resolve(user);
-      },
-      reject
-    );
-  })
-}
-
 router.beforeEach(async(to, from, next) => {
   if(to.matched.some((record) => record.meta.requiredAuth)) {
-    if(await getCurrentUser()) {
+    const refreshtoken = Cookies.get('refreshToken')
+    const token = Cookies.get('idToken')
+    if( token && refreshtoken) {
       next();
     } else {
       next('/login');
