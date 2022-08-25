@@ -86,9 +86,14 @@
         <div class="mb-3 form-check">
           Go back to <router-link to="/login">login</router-link>.
         </div>
-        <button type="submit" class="btn btn-primary" id="btn">Create Account</button>
+        <button type="submit" class="btn btn-primary" id="btn">
+          Create Account
+        </button>
         <button type="reset" class="btn btn-success mx-3">Reset</button>
       </form>
+
+      <button @click="googleSignIn">Google Sign In</button>
+      <button @click="facebookSignIn">Facebook Sign In</button>
     </div>
   </div>
 </template>
@@ -97,6 +102,11 @@
 /* eslint-disable no-useless-escape */
 import { getDatabase, ref, set } from "firebase/database";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+} from "firebase/auth";
 
 export default {
   name: "SignUp",
@@ -230,6 +240,72 @@ export default {
         this.form[key] = "";
       });
     },
+
+    googleSignIn() {
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          console.log(token);
+          console.log(user);
+          console.log("*************");
+          // ...
+        })
+        .catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.customData.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
+          console.log(errorCode);
+          console.log(errorMessage);
+          console.log(email);
+          console.log(credential);
+        });
+    },
+
+    facebookSignIn() {
+      const auth = getAuth();
+      const provider = new FacebookAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          // The signed-in user info.
+          const user = result.user;
+
+          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+          const credential = FacebookAuthProvider.credentialFromResult(result);
+          const accessToken = credential.accessToken;
+           console.log(user);
+          console.log(credential);
+          console.log(accessToken);
+          console.log("*************");
+
+          // ...
+        })
+        .catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.customData.email;
+          // The AuthCredential type that was used.
+          const credential = FacebookAuthProvider.credentialFromError(error);
+
+          // ...
+           console.log(errorCode);
+          console.log(errorMessage);
+          console.log(email);
+          console.log(credential);
+        });
+    },
   },
 };
 </script>
@@ -245,7 +321,7 @@ export default {
   color: red;
 }
 
-#btn{
+#btn {
   background-color: #131a27;
   color: white;
 }
