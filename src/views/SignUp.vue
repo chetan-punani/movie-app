@@ -86,14 +86,20 @@
         <div class="mb-3 form-check">
           Go back to <router-link to="/login">login</router-link>.
         </div>
-        <button type="submit" class="btn btn-primary" id="btn">Create Account</button>
+        <button type="submit" class="btn btn-primary" id="btn">
+          Create Account
+        </button>
         <button type="reset" class="btn btn-success mx-3">Reset</button>
       </form>
+
+      <div class="g-signin2" data-onsuccess="onSignIn"></div>
     </div>
   </div>
 </template>
 
 <script>
+
+
 /* eslint-disable no-useless-escape */
 import { getDatabase, ref, set } from "firebase/database";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
@@ -230,6 +236,13 @@ export default {
         this.form[key] = "";
       });
     },
+    onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
+      console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log("Name: " + profile.getName());
+      console.log("Image URL: " + profile.getImageUrl());
+      console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+    },
   },
 };
 </script>
@@ -245,7 +258,7 @@ export default {
   color: red;
 }
 
-#btn{
+#btn {
   background-color: #131a27;
   color: white;
 }
