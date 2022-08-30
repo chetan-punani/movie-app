@@ -65,6 +65,8 @@
         <button type="submit" class="btn btn-primary" id="btn">LogIn</button>
         <button type="reset" class="btn btn-success mx-3">Reset</button>
       </form>
+      <router-link to="/google-auth">Google Auth</router-link>
+      <router-link to="/facebook-auth">Facebook Auth</router-link>
     </div>
   </div>
 </template>

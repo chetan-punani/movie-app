@@ -6,6 +6,8 @@ import MovieDetails from '../views/MovieDetails.vue'
 import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import UserProfile from '../views/Profile.vue'
+import GoogleAuth from '../components/GoogleAuth.vue'
+import FacebookAuth from '../components/FacebookAuth.vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 Vue.use(VueRouter)
@@ -45,6 +47,8 @@ const routes = [
     name: 'user-profile',
     component: UserProfile,
   },
+  { name: 'google-auth', path: '/google-auth', component: GoogleAuth, props: true },
+  { name: 'facebook-auth', path: '/facebook-auth', component: FacebookAuth, props: true },
 ]
 
 const router = new VueRouter({
@@ -66,9 +70,9 @@ const getCurrentUser = () => {
   })
 }
 
-router.beforeEach(async(to, from, next) => {
-  if(to.matched.some((record) => record.meta.requiredAuth)) {
-    if(await getCurrentUser()) {
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiredAuth)) {
+    if (await getCurrentUser()) {
       next();
     } else {
       next('/login');
