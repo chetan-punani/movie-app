@@ -167,31 +167,31 @@ export default {
     handleEditData() {
       this.disable = false;
     },
-    getUserData() {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (user) {
-        const dbRef = ref(getDatabase());
-        get(child(dbRef, `users/${user.uid}`))
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              this.form.email = snapshot.val().email;
-              this.form.password = snapshot.val().password;
-            } else {
-              console.log("No data available");
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      } else {
-        // No user is signed in.
-      }
-    },
-  },
+    // getUserData() {
+    //   const auth = getAuth();
+    //   const user = auth.currentUser;
+    //   if (user) {
+    //     const dbRef = ref(getDatabase());
+    //     get(child(dbRef, `users/${user.uid}`))
+    //       .then((snapshot) => {
+    //         if (snapshot.exists()) {
+    //           this.form.email = snapshot.val().email;
+    //           this.form.password = snapshot.val().password;
+    //         } else {
+    //           console.log("No data available");
+    //         }
+    //       })
+    //       .catch((error) => {
+    //         console.error(error);
+    //       });
+    //   } else {
+    //     // No user is signed in.
+    //   }
+  //   },
+  // },
 
-  mounted() {
-    this.getUserData();
+  // mounted() {
+  //   this.getUserData();
   },
 };
 </script>

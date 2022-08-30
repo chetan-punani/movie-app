@@ -89,7 +89,7 @@
                   >
                     User
                   </a>
-                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown"  v-if="!isAuthenticated">
                     <li class="btn">
                       <RouterLink to="/user-profile">Profile</RouterLink>
                     </li>
@@ -112,6 +112,7 @@
 <script>
 import Cookies from "js-cookie";
 import gernesData from "../utils/gernes.js";
+import { mapState } from 'vuex';
 
 export default {
   name: "theheader",
@@ -121,6 +122,9 @@ export default {
       searchMovieName: "",
       gernes: gernesData,
     };
+  },
+   computed:{
+      ...mapState(['isAuthenticated'])
   },
   methods: {
     searchMovie() {
@@ -148,8 +152,8 @@ export default {
   mounted() {
    const refreshtoken = Cookies.get("refreshToken");
     const token = Cookies.get("idToken");
-    console.log(refreshtoken)
-    console.log(token)
+    // console.log(refreshtoken)
+    // console.log(token)
     if (token && refreshtoken) {
       this.isLoggedIn = false;
     } else {
